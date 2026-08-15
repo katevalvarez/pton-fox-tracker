@@ -6,3 +6,4 @@ log of things im learning
 
 [google maps]
 - google maps API
+- javascript
