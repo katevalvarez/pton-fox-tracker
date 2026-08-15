@@ -93,5 +93,59 @@ function initMap() {
         createInfoWindow();
     }
 
+    map.addListener("click", (e) => {
+        const clickedLatLng = e.latLng;
+
+        // Place marker visually on the map right away
+        createMarker(clickedLatLng);
+
+        // Save the coordinates to your backend database
+        saveMarkerToDatabase(clickedLatLng.lat(), clickedLatLng.lng());
+    });
     
+    function createMarker(latLng) {
+        new google.maps.Marker({
+            position: latLng,
+            map: map,
+            icon: {
+                url: "fox-face.png", // Path to your file
+                scaledSize: new google.maps.Size(40, 40), // Resizes the image to 40x40 pixels
+                size: new google.maps.Size(40, 40), // Dimensions of the source graphic
+                origin: new google.maps.Point(0, 0), // Coordinates tracking top-left of the image
+                anchor: new google.maps.Point(20, 40) // Anchors the bottom-middle of the pin to the map coordinate
+            }
+        });
+    }
+
+    async function saveMarkerToDatabase(lat, lng) {
+        try {
+            const response = await fetch('/api/markers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ lat: lat, lng: lng }),
+            });
+            
+            const data = await response.json();
+            console.log("Marker saved successfully:", data);
+        } catch (error) {
+            console.error("Error saving marker:", error);
+        }
+    }
+
+    async function loadSavedMarkers() {
+        try {
+            const response = await fetch('/api/markers');
+            const markers = await response.json(); // Expecting an array of { lat, lng } objects
+
+            markers.forEach((location) => {
+                createMarker({ lat: location.lat, lng: location.lng });
+            });
+        } catch (error) {
+            console.error("Error loading markers:", error);
+        }
+    }
 }
+
+

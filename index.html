@@ -3,12 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Princeton Fox Tracker</title>
+        <title>Princeton Fox Spotter</title>
         <link href="style.css" rel="stylesheet">
     </head>
     <body>
-        <div id="google-map">
+        <div class="parent-container">
+            <div class="container">
+                <div id="google-map">
+                </div>
+            </div>
+
+            <div class="container" id="buttons-container">
+                <div>
+                    <input type="text" id="markerName" placeholder="Enter custom label">
+                    <button id="addMarkerBtn">Add Loc</button>
+                </div>
+            </div>
         </div>
+        
         
     </body>
 
